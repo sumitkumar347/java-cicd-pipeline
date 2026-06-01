@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Java CI/CD Control Center</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Decor -->
+    <div class="decor-blob blob-1"></div>
+    <div class="decor-blob blob-2"></div>
+    <div class="decor-blob blob-3"></div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-logo">
+                <i class="fa-solid fa-network-wired icon-glow"></i>
+                <div class="logo-text">
+                    <h1>DEVOPS<span>CORE</span></h1>
+                    <p>Java Web App E2E CI/CD Pipeline Simulator</p>
+                </div>
+            </div>
+            <div class="system-status-indicator">
+                <span class="status-dot green pulse" id="env-status-dot"></span>
+                <span id="env-status-text">Production Host VM Online</span>
+            </div>
+        </header>
+
+        <!-- Pipeline Overview Grid -->
+        <section class="pipeline-section glass-panel">
+            <div class="section-title">
+                <h2><i class="fa-solid fa-route"></i> CI/CD Pipeline Workflow</h2>
+                <div class="pipeline-badges">
+                    <span class="badge" id="pipeline-status-badge">READY</span>
+                    <span class="badge" id="pipeline-timer-badge">0.0s</span>
+                </div>
+            </div>
+            
+            <div class="pipeline-track-container">
+                <div class="pipeline-track">
+                    <!-- Stage 1 -->
+                    <div class="stage-node pending" id="stage-checkout">
+                        <div class="node-icon"><i class="fa-solid fa-code-commit"></i></div>
+                        <div class="node-info">
+                            <h3>Checkout</h3>
+                            <p>Git Source Pull</p>
+                            <span class="stage-duration">--</span>
+                        </div>
+                    </div>
+                    <div class="stage-connector" id="conn-checkout"></div>
+
+                    <!-- Stage 2 -->
+                    <div class="stage-node pending" id="stage-build">
+                        <div class="node-icon"><i class="fa-solid fa-hammer"></i></div>
+                        <div class="node-info">
+                            <h3>Maven Build</h3>
+                            <p>Java Compile</p>
+                            <span class="stage-duration">--</span>
+                        </div>
+                    </div>
+                    <div class="stage-connector" id="conn-build"></div>
+
+                    <!-- Stage 3 -->
+                    <div class="stage-node pending" id="stage-test">
+                        <div class="node-icon"><i class="fa-solid fa-vial-circle-check"></i></div>
+                        <div class="node-info">
+                            <h3>Unit Test</h3>
+                            <p>JUnit Suite</p>
+                            <span class="stage-duration">--</span>
+                        </div>
+                    </div>
+                    <div class="stage-connector" id="conn-test"></div>
+
+                    <!-- Stage 4 -->
+                    <div class="stage-node pending" id="stage-security">
+                        <div class="node-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div class="node-info">
+                            <h3>Security Scan</h3>
+                            <p>Trivy CVE Check</p>
+                            <span class="stage-duration">--</span>
+                        </div>
+                    </div>
+                    <div class="stage-connector" id="conn-security"></div>
+
+                    <!-- Stage 5 -->
+                    <div class="stage-node pending" id="stage-containerize">
+                        <div class="node-icon"><i class="fa-brands fa-docker"></i></div>
+                        <div class="node-info">
+                            <h3>Containerize</h3>
+                            <p>Docker Push</p>
+                            <span class="stage-duration">--</span>
+                        </div>
+                    </div>
+                    <div class="stage-connector" id="conn-containerize"></div>
+
+                    <!-- Stage 6 -->
+                    <div class="stage-node pending" id="stage-deploy">
+                        <div class="node-icon"><i class="fa-solid fa-cubes"></i></div>
+                        <div class="node-info">
+                            <h3>CD Deploy</h3>
+                            <p>Docker VM Rollout</p>
+                            <span class="stage-duration">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Interface Grid (3 Columns) -->
+        <main class="main-content-enhanced">
+            
+            <!-- Column 1: Configs & Commit simulator -->
+            <div class="controls-col flex-column">
+                
+                <!-- Git Workspace Simulator -->
+                <div class="glass-panel card-panel">
+                    <h3><i class="fa-solid fa-code-fork text-primary"></i> Git Workspace Simulator</h3>
+                    <p class="panel-desc">Author code modifications and commit to trigger code pipelines.</p>
+                    
+                    <div class="form-group">
+                        <label for="git-branch">Target Git Branch</label>
+                        <select id="git-branch" class="form-control">
+                            <option value="main">main (Production)</option>
+                            <option value="dev">dev (Staging)</option>
+                            <option value="hotfix/security">hotfix/security (Patch)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="git-message">Commit Message</label>
+                        <input type="text" id="git-message" class="form-control" value="feat: update systems health indicator configurations" placeholder="Write commit description...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="git-author">Author</label>
+                        <input type="text" id="git-author" class="form-control" value="devops-engineer@company.local">
+                    </div>
+
+                    <div class="btn-group">
+                        <button id="btn-commit-push" class="btn btn-primary btn-full">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Commit & Git Push
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pipeline Gate Configurations -->
+                <div class="glass-panel card-panel">
+                    <h3><i class="fa-solid fa-sliders text-warning"></i> Pipeline Gates & Scale</h3>
+                    <p class="panel-desc">Configure security checks thresholds and infrastructure bounds.</p>
+                    
+                    <div class="config-item">
+                        <div class="config-label-desc">
+                            <label for="config-trivy-gate">Trivy Security Gate</label>
+                            <span>Fail build if vulnerability exceeds:</span>
+                        </div>
+                        <select id="config-trivy-gate" class="form-control">
+                            <option value="CRITICAL">Critical Severity (Standard)</option>
+                            <option value="HIGH">High & Critical (Strict)</option>
+                            <option value="MEDIUM">Any Vulnerability (Ultra-Strict)</option>
+                        </select>
+                    </div>
+
+                    <div class="config-item">
+                        <div class="config-label-desc">
+                            <label for="k8s-scale-slider">Docker Containers Count: <span id="replica-count-display" class="text-primary font-mono">3</span></label>
+                            <span>Scale container instances dynamically:</span>
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="k8s-scale-slider" min="1" max="5" value="3" class="range-slider">
+                        </div>
+                    </div>
+
+                    <div class="config-item">
+                        <div class="injector-item-inline">
+                            <div class="injector-text">
+                                <label for="config-slack">Slack Notifications</label>
+                                <span>Notify build statuses on chat channel</span>
+                            </div>
+                            <input type="checkbox" id="config-slack" class="ios-switch" checked>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Run Commands Panel -->
+                <div class="glass-panel card-panel">
+                    <h3><i class="fa-solid fa-play"></i> Runner Options</h3>
+                    <div class="btn-group">
+                        <button id="btn-trigger" class="btn btn-primary">
+                            <i class="fa-solid fa-bolt"></i> Manual Run
+                        </button>
+                        <button id="btn-reset" class="btn btn-secondary">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+                    </div>
+                    <div class="toggle-mode-group">
+                        <div class="mode-selector width-100">
+                            <button id="mode-sim" class="mode-btn active flex-1">Simulate Run</button>
+                            <button id="mode-json" class="mode-btn flex-1">Load run-pipeline.json</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 2: Logs Console (Center) -->
+            <div class="terminal-panel glass-panel">
+                <div class="terminal-header">
+                    <div class="terminal-actions">
+                        <span class="term-dot term-close"></span>
+                        <span class="term-dot term-minimize"></span>
+                        <span class="term-dot term-maximize"></span>
+                        <span class="terminal-title">Active CI/CD Runner Console Logs</span>
+                    </div>
+                    <button id="btn-clear-logs" class="btn-icon" title="Clear Console"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+                <div class="terminal-body" id="logs-console">
+                    <div class="log-line system-msg">SYSTEM: DevOps Control Panel Ready. Configure Git workspace and parameters, then trigger pipeline.</div>
+                </div>
+                <div class="terminal-status-bar">
+                    <span id="active-branch-indicator"><i class="fa-solid fa-code-branch"></i> branch: <strong>main</strong></span>
+                    <span id="active-commit-indicator"><i class="fa-solid fa-hashtag"></i> sha: <strong>8f5b3a9</strong></span>
+                </div>
+            </div>
+
+            <!-- Column 3: Build History & Fault Injectors (Right) -->
+            <div class="history-col flex-column">
+                <!-- Fault Injector Panel -->
+                <div class="glass-panel card-panel">
+                    <h3><i class="fa-solid fa-circle-exclamation text-error"></i> Fault / Vulnerability Injector</h3>
+                    <p class="panel-desc">Inject faults to verify build failure paths and self-healing.</p>
+                    
+                    <div class="injector-list">
+                        <div class="injector-item">
+                            <div class="injector-text">
+                                <label for="inj-build">Java Compile Bug</label>
+                                <span>Fails Maven Compilation phase</span>
+                            </div>
+                            <input type="checkbox" id="inj-build" class="ios-switch">
+                        </div>
+
+                        <div class="injector-item">
+                            <div class="injector-text">
+                                <label for="inj-test">Unit Test Regression</label>
+                                <span>Fails testing phase (JUnit claims)</span>
+                            </div>
+                            <input type="checkbox" id="inj-test" class="ios-switch">
+                        </div>
+
+                        <div class="injector-item">
+                            <div class="injector-text">
+                                <label for="inj-security">CVE Security Leak</label>
+                                <span>Inject Log4J CVE vulnerability</span>
+                            </div>
+                            <input type="checkbox" id="inj-security" class="ios-switch">
+                        </div>
+
+                        <div class="injector-item">
+                            <div class="injector-text">
+                                <label for="inj-package">Docker Registry Block</label>
+                                <span>Fails registry uploads</span>
+                            </div>
+                            <input type="checkbox" id="inj-package" class="ios-switch">
+                        </div>
+
+                        <div class="injector-item">
+                            <div class="injector-text">
+                                <label for="inj-deploy">Deploy Out of Memory</label>
+                                <span>Docker container crashes with OOMKilled</span>
+                            </div>
+                            <input type="checkbox" id="inj-deploy" class="ios-switch">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Build Runs History -->
+                <div class="glass-panel card-panel flex-grow-card flex-column">
+                    <h3><i class="fa-solid fa-clock-rotate-left text-muted"></i> Pipeline Runs Cache</h3>
+                    <p class="panel-desc">Historical records of compilation cycles. Click a row to reload its logs.</p>
+                    <div class="runs-history-container" id="runs-history-list">
+                        <!-- History items generated dynamically -->
+                        <div class="no-history-msg">No runs stored in this session yet.</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Docker Host VM Topology Visualizer -->
+        <section class="topology-section glass-panel">
+            <div class="section-title">
+                <h2><i class="fa-solid fa-sitemap"></i> Docker Host VM Container Topology (Staging/Prod)</h2>
+                <div class="cluster-summary">
+                    <span id="active-replicas-summary">Active Containers: <strong>3 / 3</strong></span>
+                </div>
+            </div>
+
+            <div class="topology-container">
+                <!-- Visual Map Nodes -->
+                <div class="topology-map">
+                    <!-- Client Request -->
+                    <div class="topology-node" id="node-client">
+                        <div class="top-icon blue-glow"><i class="fa-solid fa-globe"></i></div>
+                        <div class="top-label">Client Request</div>
+                        <div class="top-ip">http://devops-java.local</div>
+                    </div>
+                    <div class="top-connector-line conn-active"></div>
+
+                    <!-- Nginx Reverse Proxy -->
+                    <div class="topology-node" id="node-ingress">
+                        <div class="top-icon purple-glow"><i class="fa-solid fa-route"></i></div>
+                        <div class="top-label">Nginx Proxy</div>
+                        <div class="top-ip">Reverse Proxy VM</div>
+                    </div>
+                    <div class="top-connector-line conn-active"></div>
+
+                    <!-- Service Load Balancer -->
+                    <div class="topology-node" id="node-service">
+                        <div class="top-icon green-glow"><i class="fa-solid fa-network-wired"></i></div>
+                        <div class="top-label">Docker Gateway</div>
+                        <div class="top-ip">Bridge Network / Host Port</div>
+                    </div>
+                    
+                    <!-- Container Route Connectors -->
+                    <div class="topology-routing-system" id="network-routes">
+                        <!-- Connecting lines drawn here -->
+                    </div>
+
+                    <!-- Container Grid (Replicated app containers) -->
+                    <div class="topology-pods-grid" id="k8s-pods-grid">
+                        <!-- Container Cards loaded dynamically based on Scale range -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Monitoring Section: Live Prometheus charts -->
+        <section class="monitoring-section glass-panel">
+            <div class="section-title">
+                <h2><i class="fa-solid fa-chart-line"></i> Prometheus Scraped Container Metrics</h2>
+                <div class="scraping-indicator">
+                    <span class="status-dot green pulse"></span>
+                    <span>Scrape interval: 5s</span>
+                </div>
+            </div>
+
+            <div class="monitoring-grid">
+                <div class="chart-container">
+                    <canvas id="cpuChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="memoryChart"></canvas>
+                </div>
+                <div class="metrics-counters">
+                    <div class="metric-card">
+                        <div class="metric-val" id="val-rt">45ms</div>
+                        <div class="metric-lbl">Response Latency</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-val" id="val-throughput">240 req/s</div>
+                        <div class="metric-lbl">Traffic Throughput</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-val" id="val-err">0.00%</div>
+                        <div class="metric-lbl">HTTP Error Rate</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Java Web Application End-to-End DevOps Project - Interactive Dashboard</p>
+            <p>Orchestration, CI Automated Testing, Dependency Scans, and Self-Healing Deployments</p>
+        </footer>
+    </div>
+
+    <!-- Modal for Container Logs -->
+    <div class="modal-overlay" id="pod-logs-modal">
+        <div class="modal-box glass-panel">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-file-invoice-dollar"></i> Container System Logs: <span id="modal-pod-name" class="text-primary font-mono">java-web-app-xxx</span></h3>
+                <button class="modal-close-btn" id="btn-close-modal">&times;</button>
+            </div>
+            <div class="modal-body terminal-body font-mono" id="modal-pod-logs-body">
+                <!-- Log contents -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Self-Healing Event Alerts -->
+    <div class="alert-toast-container" id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>

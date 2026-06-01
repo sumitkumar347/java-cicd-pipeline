@@ -1,0 +1,67 @@
+﻿{
+    "status":  "SUCCESS",
+    "timestamp":  "2026-06-01 11:58:05",
+    "stages":  [
+                   {
+                       "name":  "Checkout",
+                       "status":  "PASSED",
+                       "duration":  "1.2s",
+                       "logs":  [
+                                    "git version 2.43.0.windows.1",
+                                    "Cloning repository...",
+                                    "HEAD is now at 8f5b3a9 refactor: update application health indicators"
+                                ]
+                   },
+                   {
+                       "name":  "Build",
+                       "status":  "PASSED",
+                       "duration":  "2.8s",
+                       "logs":  [
+                                    "Maven compile execution succeeded."
+                                ]
+                   },
+                   {
+                       "name":  "Test",
+                       "status":  "PASSED",
+                       "duration":  "2.5s",
+                       "logs":  [
+                                    "Maven test execution passed."
+                                ]
+                   },
+                   {
+                       "name":  "Security Scan",
+                       "status":  "PASSED",
+                       "duration":  "2.1s",
+                       "logs":  [
+                                    "Scanning code using spotbugs:check...",
+                                    "No high-severity bugs found.",
+                                    "Running OWASP Dependency-Check...",
+                                    "No vulnerable components matching threshold (HIGH/CRITICAL)."
+                                ]
+                   },
+                   {
+                       "name":  "Containerize",
+                       "status":  "PASSED",
+                       "duration":  "3.2s",
+                       "logs":  [
+                                    "Docker image devops-java-app:1.0.0 built successfully."
+                                ]
+                   },
+                   {
+                       "name":  "Deploy",
+                       "status":  "PASSED",
+                       "duration":  "2.4s",
+                       "logs":  [
+                                    "SSH: Connecting to Docker Host VM (192.168.1.10)...",
+                                    "Docker: Pulling devops/java-devops-app:latest... success",
+                                    "Docker: Stopping existing java-web-app containers... stopped",
+                                    "Docker: Removing container templates... removed",
+                                    "Docker: Creating and starting container instances...",
+                                    "Docker: running container java-web-app-1 (port 8081) - status: HEALTHY",
+                                    "Docker: running container java-web-app-2 (port 8082) - status: HEALTHY",
+                                    "Docker: running container java-web-app-3 (port 8083) - status: HEALTHY",
+                                    "Nginx Proxy: Reloading routing config. Available at http://devops-java.local/"
+                                ]
+                   }
+               ]
+}

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.devops.app.HealthControllerTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.496 s -- in com.devops.app.HealthControllerTest
