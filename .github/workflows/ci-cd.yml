@@ -96,7 +96,7 @@ jobs:
           ${{ secrets.DOCKERHUB_USERNAME }}/java-devops-app:${{ github.sha }}
 
   deploy:
-    name: Continuous Deployment (Target: Docker Host VM)
+    name: "Continuous Deployment (Target: Docker Host VM)"
     needs: package-and-push
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
